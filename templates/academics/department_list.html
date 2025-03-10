@@ -1,0 +1,59 @@
+{% extends 'base_site.html' %}
+
+{% block title %}All Departments | Grand Crest University{% endblock title %}
+
+{% block breadcrumb %}
+    <div class="flex [.header_&amp;]:below-lg:hidden items-center gap-1.25 text-xs lg:text-sm font-medium mb-2.5 lg:mb-0" data-reparent="true" data-reparent-mode="prepend|lg:prepend" data-reparent-target="#content_container|lg:#header_container">
+        <span class="text-gray-600">Dashboard</span>
+        <i class="ki-filled ki-right text-gray-500 text-3xs"></i>
+        <span class="text-gray-700">All Departments</span>
+    </div>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <!-- begin: container -->
+    <div class="container-fixed">
+        <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+            <div class="flex flex-col justify-center gap-2">
+                <h1 class="text-xl font-semibold leading-none text-gray-900">All Departments</h1>
+            </div>
+        </div>
+    </div>
+    <!-- end: container -->
+
+    <!-- begin: container -->
+    <div class="container-fixed">
+        <div class="card card-grid">
+            <div class="card-header">
+                <h3 class="card-title">All Departments</h3>
+                <div class="flex">
+                    <a href="{% url 'department_add' %}" class="btn btn-sm btn-primary">Add Department</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th class="text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for department in departments %}
+                            <tr>
+                                <td>{{ department.name }}</td>
+                                <td>{{ department.code }}</td>
+                                <td class="text-right">
+                                    <a href="{% url 'department_edit' department.id %}" class="btn btn-transparent hover:btn-secondary"><i class="ki-filled ki-pencil"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- end: container -->
+    
+{% endblock content %}

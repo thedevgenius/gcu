@@ -1,0 +1,54 @@
+{% extends 'base_site.html' %}
+
+{% block title %}Add New Department | Grand Crest University{% endblock title %}
+
+{% block breadcrumb %}
+    <div class="flex [.header_&amp;]:below-lg:hidden items-center gap-1.25 text-xs lg:text-sm font-medium mb-2.5 lg:mb-0" data-reparent="true" data-reparent-mode="prepend|lg:prepend" data-reparent-target="#content_container|lg:#header_container">
+        <span class="text-gray-600">Dashboard</span>
+        <i class="ki-filled ki-right text-gray-500 text-3xs"></i>
+        <span class="text-gray-700">Add New Department</span>
+    </div>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <!-- begin: container -->
+    <div class="container-fixed">
+        <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+            <div class="flex flex-col justify-center gap-2">
+                <h1 class="text-xl font-semibold leading-none text-gray-900">Add New Department</h1>
+            </div>
+        </div>
+    </div>
+    <!-- end: container -->
+
+    <!-- begin: container -->
+    <div class="container-fixed">
+        <form method="post" novalidate="novalidate">
+             {% csrf_token %}
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Department Info</h3>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col gap-1">
+                        <label class="form-label font-normal text-gray-900" for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                        {{ form.name }}
+                        {{ form.name.errors }}
+                    </div>
+                    <div class="flex flex-col gap-1 mt-5">
+                        <label class="form-label font-normal text-gray-900" for="{{ form.code.id_for_label }}">{{ form.code.label }}</label>
+                        {{ form.code }}
+                        {{ form.code.errors }}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-end gap-5 mt-5">
+                <button type="reset" class="btn btn-secondary">CANCEL</button>
+                <button type="submit" class="btn btn-primary">SAVE</button>
+            </div>
+        </form>
+    </div>
+    <!-- end: container -->
+    
+{% endblock content %}
