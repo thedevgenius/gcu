@@ -25,9 +25,9 @@
     <div class="container-fixed">
         <div class="card card-grid">
             <div class="card-header">
-                <h3 class="card-title">All Departments</h3>
+                <h3 class="card-title">All Departments ({{ total_depertment }})</h3>
                 <div class="flex">
-                    <a href="{% url 'department_add' %}" class="btn btn-sm btn-primary">Add Department</a>
+                    <a href="{% url 'department_add' %}" class="btn btn-sm btn-primary"><i class="ki-filled ki-plus-squared"></i> Add Department</a>
                 </div>
             </div>
             <div class="card-body">
@@ -45,7 +45,7 @@
                                 <td>{{ department.name }}</td>
                                 <td>{{ department.code }}</td>
                                 <td class="text-right">
-                                    <a href="{% url 'department_edit' department.id %}" class="btn btn-transparent hover:btn-secondary"><i class="ki-filled ki-pencil"></i></a>
+                                    <a href="{% url 'department_edit' department.id %}" class="btn btn-sm btn-icon btn-clear btn-light"><i class="ki-filled ki-pencil"></i></a>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -55,5 +55,8 @@
         </div>
     </div>
     <!-- end: container -->
+
+    
     
 {% endblock content %}
+

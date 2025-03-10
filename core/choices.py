@@ -18,3 +18,23 @@ USER_TYPE_CHOICES = [
 COURSE_LEVEL_CHOICES =[
     ('DP', 'Diploma'), ('UG', 'Undergraduate'), ('PG', 'Postgraduate')
 ]
+
+ADDRESS_TYPE_CHOICES = [
+    ('PR', 'Permanent'), ('PS', 'Present')
+]
+
+STATE_CHOICES = [
+    ('AN', 'Andaman and Nicobar Islands'), ('AP', 'Andhra Pradesh'), ('AR', 'Arunachal Pradesh'),
+    ('AS', 'Assam'), ('BR', 'Bihar'), ('CH', 'Chandigarh'), ('CG', 'Chhattisgarh'), ('DD', 'Dadra and Nagar Haveli'),
+    ('DL', 'Delhi'), ('GA', 'Goa'), ('GJ', 'Gujarat'), ('HR', 'Haryana'), ('HP', 'Himachal Pradesh'), ('JK', 'Jammu and Kashmir'),
+    ('JH', 'Jharkhand'), ('KA', 'Karnataka'), ('KL', 'Kerala'), ('LD', 'Lakshadweep'), ('MP', 'Madhya Pradesh'), ('MH', 'Maharashtra'),
+    ('MN', 'Manipur'), ('ML', 'Meghalaya'), ('MZ', 'Mizoram'), ('NL', 'Nagaland'), ('OR', 'Odisha'), ('PY', 'Puducherry'),
+]
+
+RELATION_CHOICES = [
+    ('F', 'Father'), ('M', 'Mother'), ('B', 'Brother'), ('S', 'Sister'), ('O', 'Other')
+]
+
+LATEST_QUALIFICATION_CHOICES = [
+    ('10', '10th'), ('12', '12th'), ('UG', 'Undergraduate'), ('PG', 'Postgraduate')
+]
