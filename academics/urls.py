@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import DepartmentAddView, DepartmentListView, DepartmentEditView, CourseAddView, CourseListView, CourseEditView
+from .views import DepartmentAddView, DepartmentListView, DepartmentEditView, CourseAddView, CourseListView, CourseEditView, AcademicYearView
 #Create your urls here
 
 urlpatterns = [
@@ -10,4 +10,5 @@ urlpatterns = [
     path('course/add/', CourseAddView.as_view(), name='course_add'),
     path('course/list/', CourseListView.as_view(), name='course_list'),
     path('course/edit/<int:pk>/', CourseEditView.as_view(), name='course_edit'),
+    path('academic-years/', AcademicYearView.as_view(), name='academic_year'),
 ]

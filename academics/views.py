@@ -5,7 +5,7 @@ from django.views import View
 from django.urls import reverse_lazy
 from django.template.loader import render_to_string
 
-from .models import Department, Course
+from .models import Department, Course, AcademicYear
 from .forms import DepartmentAddForm, CourseAddForm
 # Create your views here.
 
@@ -61,3 +61,12 @@ class CourseEditView(UpdateView):
     form_class = CourseAddForm
     success_url = reverse_lazy('course_list')
 
+
+class AcademicYearView(TemplateView):
+    template_name = 'academics/academic_year.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['acys'] = AcademicYear.objects.all()
+        return context
+    

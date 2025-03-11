@@ -1,8 +1,13 @@
 {% extends 'base_site.html' %}
+{% load account_tags %}
 
 {% block title %}{{ student.user.username }} | Admission | Grand Crest University{% endblock title %}
 
 {% block content %}
+    <style>
+        .adm-content{display: none;}
+        .adm-content.active{display: block;}
+    </style>
     <!-- begin: container -->
     <div class="container-fixed">
         <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
@@ -14,46 +19,24 @@
     <!-- end: container -->
 
     <div class="container-fixed">
-        <div class="flex grow gap-5 lg:gap-7.5">
-            <div class="hidden lg:block w-[230px] shrink-0">
-                <div class="w-[230px]" data-sticky="true" data-sticky-animation="true" data-sticky-class="fixed top-[calc(var(--tw-header-height)+1.875rem)] z-10 left-auto" data-sticky-name="scrollspy" data-sticky-offset="500">
-                    <div class="flex flex-col grow relative before:absolute before:left-[11px] before:top-0 before:bottom-0 before:border-l before:border-gray-200" data-scrollspy="true" data-scrollspy-offset="80px|lg:110px" data-scrollspy-target="body">
-                        <a hrer="#personal_info" class="{% if student.step == 1 %}active{% endif %} flex items-center rounded-lg pl-2.5 pr-2.5 py-2.5 gap-1.5 border border-transparent text-2sm font-medium text-gray-700 hover:text-primary scrollspy-active:bg-secondary-active scrollspy-active:text-primary dark:hover:bg-coal-300 dark:hover:border-gray-100 hover:rounded-lg dark:scrollspy-active:bg-coal-300 dark:scrollspy-active:border-gray-100" data-scrollspy-anchor="true">
-                            <span class="flex w-1.5 relative before:absolute before:top-0 before:left-px before:size-1.5 before:rounded-full before:-translate-x-2/4 before:-translate-y-2/4 scrollspy-active:before:bg-primary"></span>
-                            Personal Info
-                        </a>
-                        <a href="#academic_record" class="{% if student.step == 2 %}active{% endif %}  flex items-center rounded-lg pl-2.5 pr-2.5 py-2.5 gap-1.5 border border-transparent text-2sm font-medium text-gray-700 hover:text-primary scrollspy-active:bg-secondary-active scrollspy-active:text-primary dark:hover:bg-coal-300 dark:hover:border-gray-100 hover:rounded-lg dark:scrollspy-active:bg-coal-300 dark:scrollspy-active:border-gray-100" data-scrollspy-anchor="true">
-                            <span class="flex w-1.5 relative before:absolute before:top-0 before:left-px before:size-1.5 before:rounded-full before:-translate-x-2/4 before:-translate-y-2/4 scrollspy-active:before:bg-primary"></span>
-                            Academic Record
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-col items-stretch grow gap-5 lg:gap-7.5">
-
-                <div id="personal_info" class="hidden" {% if student.step == 1 %} style="display: block;" {% endif %}>
-                    <div class="card pb-2.5">
-                        <div class="card-header">
-                            <h3 class="card-title">Personal Info</h3>
-                        </div>
-                        <div class="card-body grid gap-5">
-                            
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="academic_record" class="hidden" {% if student.step == 2 %} style="display: block;" {% endif %}>
-                    <div class="card pb-2.5">
-                        <div class="card-header">
-                            <h3 class="card-title">Class 10 Record</h3>
-                        </div>
-                        <div class="card-body grid gap-5">
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
     </div>
     
 {% endblock content %}
+
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            $('.adm-btn').on('click', function (e) {
+                e.preventDefault();
+                var id = $(this).attr('href');
+                $('.adm-btn').removeClass('active');
+                $(this).addClass('active');
+                $('.adm-content').removeClass('active');
+                $(id).addClass('active');
+            });
+        });
+    </script>
+{% endblock extra_js %}
+    

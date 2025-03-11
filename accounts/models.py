@@ -46,6 +46,9 @@ class Address(models.Model):
 
     def get_address_type(self):
         return dict(ADDRESS_TYPE_CHOICES)[self.type]
+    
+    def get_state(self):
+        return dict(STATE_CHOICES)[self.state]
 
     def __str__(self):
         return f'{self.user.username} - {self.get_address_type()}'
