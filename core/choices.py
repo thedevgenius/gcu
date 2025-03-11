@@ -1,4 +1,5 @@
 GENDER_CHOICES = [
+    ('', '-- Select Gender --'),
     ('M', 'Male'),
     ('F', 'Female'),
 ]

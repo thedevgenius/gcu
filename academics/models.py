@@ -8,7 +8,7 @@ class AcademicYear(models.Model):
     is_open = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.start_date} - {self.end_date}'
+        return f'{self.start_date.year} - {self.end_date.year}'
 
 
 class Department(models.Model):
