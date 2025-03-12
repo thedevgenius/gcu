@@ -27,7 +27,8 @@
             <div class="card-header">
                 <h3 class="card-title">All Departments ({{ total_depertment }})</h3>
                 <div class="flex">
-                    <a href="{% url 'department_add' %}" class="btn btn-sm btn-primary"><i class="ki-filled ki-plus-squared"></i> Add Department</a>
+                    <button class="btn btn-sm btn-primary" data-modal-toggle="#department_add"><i class="ki-filled ki-plus-squared"></i> Add Department</button>
+                    <!-- <a href="{% url 'department_add' %}" ></a> -->
                 </div>
             </div>
             <div class="card-body">
@@ -56,7 +57,68 @@
     </div>
     <!-- end: container -->
 
-    
+    <div class="modal" data-modal="true" id="department_add">
+        <div class="modal-content max-w-[600px] top-[10%]">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    Modal Title
+                </h3>
+                <button class="btn btn-xs btn-icon btn-light" data-modal-dismiss="true">
+                    <i class="ki-outline ki-cross">
+                    </i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" novalidate="novalidate" id="department_add_form">
+                    {% csrf_token %}
+                    <div class="flex flex-col gap-1">
+                        <label class="form-label font-normal text-gray-900" for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                        {{ form.name }}
+                        {{ form.name.errors }}
+                    </div>
+                    <div class="flex flex-col gap-1 mt-5">
+                        <label class="form-label font-normal text-gray-900" for="{{ form.code.id_for_label }}">{{ form.code.label }}</label>
+                        {{ form.code }}
+                        {{ form.code.errors }}
+                    </div>
+                    
+                    <div class="flex justify-end gap-5 mt-5">
+                        <button type="reset" class="btn btn-secondary">CANCEL</button>
+                        <button type="submit" class="btn btn-primary">SAVE</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     
 {% endblock content %}
 
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function(){
+            $('#department_add_form').submit(function(e){
+                e.preventDefault();
+                form = $(this);
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "department_add" %}',
+                    data: form.serialize(),
+                    success: function (res) {
+                        if (res.status == false) {
+                            displayErrors(res.errors);
+                        } else {
+                            form.trigger("reset");
+                            // location.reload();
+                            console.log(res);
+                        }
+                    },
+                    error: function(xhr){
+                        
+                    }
+                })
+            })
+        });
+    </script>
+{% endblock extra_js %}
+    

@@ -1,6 +1,7 @@
 from django.db import models
 from core.choices import COURSE_LEVEL_CHOICES, SEMESTER_CHOICE
 from accounts.models import Student
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 class AcademicYear(models.Model):
@@ -40,13 +41,36 @@ class Course(models.Model):
     def get_level(self):
         return dict(COURSE_LEVEL_CHOICES)[self.level]
     
+    def get_student_count(self):
+        students = Student.objects.filter(course=self)
+        return students.count()
+    
+def is_even(num):
+    return True if num%2 == 0 else False
+
+    
 class Grade(models.Model):
     course = models.ForeignKey('Course', on_delete=models.CASCADE)
     number = models.IntegerField()
     name = models.CharField(max_length=50)
+    status = models.BooleanField(default=False)
 
+    class Meta:
+        unique_together = ['course', 'number']
+    
     def __str__(self):
         return f'{self.course.code} {self.name} {self.number}'
+    
+    def clean(self):
+        if is_even(self.number) and Grade.objects.filter(course=self.course, number__in=[1, 3, 5, 7], status=True).exists():
+            raise ValidationError("You can't activate both Odd and Even Semesters")
+        super().clean()
+    
+    def save(self, *args, **kwargs):
+        self.clean()
+        return super().save(*args, **kwargs)
+    
+
 
 class Subject(models.Model):
     grade = models.ForeignKey('Grade', on_delete=models.CASCADE)

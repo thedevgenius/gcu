@@ -33,6 +33,7 @@
                         <tr>
                             <th>Title</th>
                             <th>Admission Status</th>
+                            <th>Current Semester</th>
                             <th>Total Student</th>
                         </tr>
                     </thead>
@@ -47,6 +48,7 @@
                                         <span class="badge badge-danger badge-outline">{{ acy.get_open }}</span>
                                     {% endif %}
                                 </td>
+                                <td></td>
                                 <td>{{ acy.get_student_count }}</td>
                             </tr>
                         {% endfor %}
