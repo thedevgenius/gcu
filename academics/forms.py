@@ -1,6 +1,6 @@
 from django import forms
 
-from core.choices import COURSE_LEVEL_CHOICES
+from core.choices import COURSE_LEVEL_CHOICES, SEMESTER_CHOICE
 from .models import Department, Course
 
 class DepartmentAddForm(forms.ModelForm):
@@ -23,3 +23,11 @@ class CourseAddForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = '__all__'
+
+
+# class SubjectAddForm(forms.ModelForm):
+#     course = forms.ModelChoiceField(queryset=Course.objects.all(), empty_label='--- Select Course ---', widget=forms.Select(attrs={'class':'select'}))
+#     semester = forms.IntegerField(widget=forms.Select(choices=SEMESTER_CHOICE, attrs={'class':'select'})) 
+#     name = forms.CharField(widget=forms.TextInput(attrs={'class':'input', 'placeholder':'Subject Name'}))
+#     code = forms.CharField(widget=forms.TextInput(attrs={'class':'input', 'placeholder':'Subject Code'}))
+#     credit = forms.IntegerField(widget=forms.)

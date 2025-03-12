@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.views.generic import CreateView, ListView, UpdateView, TemplateView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, TemplateView
 from django.views import View
 from django.urls import reverse_lazy
 from django.template.loader import render_to_string
@@ -53,7 +53,7 @@ class CourseListView(ListView):
         context = super().get_context_data(**kwargs)
         context['total_course'] = Course.objects.all().count()
         return context
-            
+
 
 class CourseEditView(UpdateView):
     template_name = 'academics/course_edit.html'
@@ -69,4 +69,10 @@ class AcademicYearView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['acys'] = AcademicYear.objects.all()
         return context
-    
+
+
+class SubjectAddView(CreateView):
+    template_name = 'academics/subject_add.html'
+
+class GradeDetailsView(DetailView):
+    template_name = 'academics/grade_details.html'

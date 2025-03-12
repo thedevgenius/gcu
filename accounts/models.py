@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
 
 from core.choices import *
 from core.utils import get_hashid, generate_random_color, rename_image
@@ -59,7 +60,7 @@ class Student(models.Model):
     
     course = models.ForeignKey('academics.Course', on_delete=models.SET_NULL, null=True, blank=True)
     academic_year = models.ForeignKey('academics.AcademicYear', on_delete=models.SET_NULL, null=True, blank=True)
-    semester = models.IntegerField(default=1)
+    grade = models.ForeignKey('academics.Grade', on_delete=models.SET_NULL, null=True)
     class_roll = models.PositiveIntegerField()
     uni_roll = models.PositiveIntegerField(unique=True, null=True, blank=True)
     reg_no = models.CharField(max_length=50, unique=True, null=True, blank=True)
@@ -86,3 +87,12 @@ class Student(models.Model):
 
     def get_hash_id(self):
         return student_hash.encode(self.id)
+    
+    def clean(self):
+        if self.grade.course != self.course:
+            raise ValidationError('Course & Grade not matched')
+        return super().clean()
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        return super().save(*args, **kwargs)

@@ -15,11 +15,9 @@
 
     <!-- begin: container -->
     <div class="container-fixed">
-        
         {% for student in students %}
-            <p class="text-white">{{ student.user.username }} <a href="{% url 'admission' student.get_hash_id %}">Complete Admission</a></p>
+            <p class="text-white">{{ student.user.username }} -> {{ student.course }} -> {{ student.grade.number }} -> <a href="{% url 'admission' student.get_hash_id %}">Complete Admission</a></p>
         {% endfor %}
-                     
     </div>
     <!-- end: container -->
     

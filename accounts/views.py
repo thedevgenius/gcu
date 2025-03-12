@@ -8,14 +8,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 from core.utils import get_hashid
-from academics.models import AcademicYear
+from academics.models import AcademicYear, Grade
 from .forms import SignInForm, StudentAddForm, AcademicForm, AddressForm
 from .models import User, Student, Address
-
-from django.http import HttpResponse
-from reportlab.lib.pagesizes import A4
-from reportlab.pdfgen import canvas
-from io import BytesIO
 
 hashids = get_hashid(saltname='user_id')
 student_hash = get_hashid(saltname='student_id')
@@ -70,6 +65,7 @@ class StudentAddView(TemplateView):
                 user=user,
                 course=course,
                 academic_year=self.get_context_data()['acayear'],
+                grade=Grade.objects.filter(course=course, number=1).first(),
                 class_roll=last_student_id+1,
                 admission_date=now,
                 step=2
@@ -117,19 +113,3 @@ class AdmissionListView(TemplateView):
         return context
     
 
-def generate_admission_form_pdf(request):
-    buffer = BytesIO()
-    pdf = canvas.Canvas(buffer, pagesize=A4)
-    
-    pdf.setFont("Helvetica", 12)
-    pdf.drawString(0, 900, "Admission Form")
-    pdf.drawString(100, 780, f"Name: John Doe")
-    pdf.drawString(100, 760, f"Date: 2025-03-11")
-
-    pdf.showPage()
-    pdf.save()
-    
-    buffer.seek(0)
-    response = HttpResponse(buffer, content_type="application/pdf")
-    response["Content-Disposition"] = 'attachment; filename="admission_form.pdf"'
-    return response
