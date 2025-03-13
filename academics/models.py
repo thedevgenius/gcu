@@ -1,5 +1,5 @@
 from django.db import models
-from core.choices import COURSE_LEVEL_CHOICES, SEMESTER_CHOICE
+from core.choices import COURSE_LEVEL_CHOICES, SEMESTER_CHOICE, GRADE_NAME_CHOICES
 from accounts.models import Student
 from django.core.exceptions import ValidationError
 
@@ -22,6 +22,7 @@ class AcademicYear(models.Model):
 class Department(models.Model):
     name = models.CharField(max_length=150)
     code = models.CharField(max_length=5)
+    is_academic = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -51,8 +52,8 @@ def is_even(num):
     
 class Grade(models.Model):
     course = models.ForeignKey('Course', on_delete=models.CASCADE)
-    number = models.IntegerField()
-    name = models.CharField(max_length=50)
+    number = models.IntegerField(choices=SEMESTER_CHOICE)
+    name = models.CharField(max_length=5, choices=GRADE_NAME_CHOICES)
     status = models.BooleanField(default=False)
 
     class Meta:
@@ -61,14 +62,14 @@ class Grade(models.Model):
     def __str__(self):
         return f'{self.course.code} {self.name} {self.number}'
     
-    def clean(self):
-        if is_even(self.number) and Grade.objects.filter(course=self.course, number__in=[1, 3, 5, 7], status=True).exists():
-            raise ValidationError("You can't activate both Odd and Even Semesters")
-        super().clean()
+    # def clean(self):
+    #     if is_even(self.number) and Grade.objects.filter(course=self.course, number__in=[1, 3, 5, 7], status=True).exists():
+    #         raise ValidationError("You can't activate both Odd and Even Semesters")
+    #     super().clean()
     
-    def save(self, *args, **kwargs):
-        self.clean()
-        return super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     self.clean()
+    #     return super().save(*args, **kwargs)
     
 
 

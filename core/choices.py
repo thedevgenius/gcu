@@ -13,10 +13,13 @@ USER_TYPE_CHOICES = [
     ('AD', 'Admin'),
     ('TE', 'Teacher'),
     ('ST', 'Student'),
-    ('SF', 'Staff'),
+    ('HR', 'Human Resource'),
+    ('AD', 'Admission'),
+    ('AC', 'Accounant'),
+    ('RP', 'Receptionist'),
 ]
 
-COURSE_LEVEL_CHOICES =[
+COURSE_LEVEL_CHOICES = [
     ('DP', 'Diploma'), ('UG', 'Undergraduate'), ('PG', 'Postgraduate')
 ]
 
@@ -49,4 +52,8 @@ SEMESTER_CHOICE = [
     (6, 'Semester 6'),
     (7, 'Semester 7'),
     (8, 'Semester 8'),
+]
+
+GRADE_NAME_CHOICES = [
+    ('SEM', 'Semester')
 ]

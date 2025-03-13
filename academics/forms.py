@@ -6,6 +6,7 @@ from .models import Department, Course, Subject
 class DepartmentAddForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class' : 'input', 'placeholder' : 'e.g. Computer Science & Engineering', 'autofocus': 'true'}))
     code = forms.CharField(widget=forms.TextInput(attrs={'class' : 'input', 'placeholder' : 'e.g. CSE'}))
+    is_academic = forms.BooleanField(required=False, widget=forms.CheckboxInput())
 
     class Meta:
         model = Department

@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 
 from core.utils import get_hashid
 from academics.models import AcademicYear, Grade
-from .forms import SignInForm, StudentAddForm, AcademicForm, AddressForm
+from .forms import SignInForm, StudentAddForm, AcademicForm, AddressForm, EmployeeAddForm
 from .models import User, Student, Address
 
 hashids = get_hashid(saltname='user_id')
@@ -76,6 +76,7 @@ class StudentAddView(TemplateView):
 
         return render(request, self.template_name, self.get_context_data())
 
+
 class AdmissionView(FormView):
     template_name = 'accounts/admission.html'
     form_class = AcademicForm  # Default form (not mandatory since we're handling multiple forms)
@@ -113,3 +114,9 @@ class AdmissionListView(TemplateView):
         return context
     
 
+class EmployeeAddView(TemplateView):
+    template_name = 'accounts/employee_add.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] =  EmployeeAddForm()
+        return context

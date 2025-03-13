@@ -96,3 +96,12 @@ class Student(models.Model):
     def save(self, *args, **kwargs):
         self.clean()
         return super().save(*args, **kwargs)
+    
+
+class Employee(models.Model):
+    user = models.OneToOneField('User', on_delete=models.CASCADE)
+    designation = models.CharField(max_length=150)
+    department = models.ForeignKey('academics.Department', on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.user.username

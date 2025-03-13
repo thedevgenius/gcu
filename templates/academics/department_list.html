@@ -46,7 +46,7 @@
                                 <td>{{ department.name }}</td>
                                 <td>{{ department.code }}</td>
                                 <td class="text-right">
-                                    <a href="{% url 'department_edit' department.id %}" class="btn btn-sm btn-icon btn-clear btn-light"><i class="ki-filled ki-pencil"></i></a>
+                                    <button data-id="{{ department.id }}" class="department-edit btn btn-sm btn-icon btn-clear btn-light"><i class="ki-filled ki-pencil"></i></button>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -60,12 +60,9 @@
     <div class="modal" data-modal="true" id="department_add">
         <div class="modal-content max-w-[600px] top-[10%]">
             <div class="modal-header">
-                <h3 class="modal-title">
-                    Modal Title
-                </h3>
+                <h3 class="modal-title">Modal Title</h3>
                 <button class="btn btn-xs btn-icon btn-light" data-modal-dismiss="true">
-                    <i class="ki-outline ki-cross">
-                    </i>
+                    <i class="ki-outline ki-cross"></i>
                 </button>
             </div>
             <div class="modal-body">
@@ -80,6 +77,14 @@
                         <label class="form-label font-normal text-gray-900" for="{{ form.code.id_for_label }}">{{ form.code.label }}</label>
                         {{ form.code }}
                         {{ form.code.errors }}
+                    </div>
+                    <div class=" mt-5">
+                        <div class="flex gap-1">
+                            {{ form.is_academic }}
+                            <label class="form-label font-normal text-gray-900" for="{{ form.is_academic.id_for_label }}">{{ form.is_academic.label }}</label>
+                        </div>
+                        
+                        {{ form.is_academic.errors }}
                     </div>
                     
                     <div class="flex justify-end gap-5 mt-5">
@@ -116,8 +121,16 @@
                     error: function(xhr){
                         
                     }
-                })
-            })
+                });
+            });
+
+            
+        
+            $('.department-edit').click(function(e){
+                const modalEl = document.querySelector('#department_add');
+                const modal = KTModal.getInstance(modalEl);
+                modal.show();
+            });
         });
     </script>
 {% endblock extra_js %}
