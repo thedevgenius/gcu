@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'core',
     'accounts',
     'academics',
+    'payment',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
