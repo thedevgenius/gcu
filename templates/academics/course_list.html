@@ -18,7 +18,7 @@
                 <h1 class="text-xl font-medium leading-none text-gray-900">Dashboard</h1>
             </div>
             <div class="flex items-center gap-2.5">
-                <button class="btn btn-sm btn-primary" data-modal-toggle="#course"><i class="ki-filled ki-plus-squared"></i> Add New Course</button>
+                <a href="{% url 'course_add' %}" class="btn btn-sm btn-primary"><i class="ki-filled ki-plus-squared"></i> Add New Course</a>
             </div>
         </div>
     </div>
@@ -42,6 +42,12 @@
                                 <span class="text-gray-900 text-2sm leading-none font-medium">{{ course.get_total_student }}</span>
                                 <span class="text-gray-700 text-xs">Total Student</span>
                             </div>
+                            {% if course.get_total_fees %}
+                                <div class="grid grid-cols-1 gap-1.5 border-[0.5px] border-dashed border-gray-400 rounded-md px-2.5 py-2 shrink-0 min-w-24 max-w-auto">
+                                    <span class="text-gray-900 text-2sm leading-none font-medium">₹ {{ course.get_total_fees }}</span>
+                                    <span class="text-gray-700 text-xs">Total Fees</span>
+                                </div>
+                            {% endif %}
                         </div>
 
                         <div class="flex items-center justify-center flex-wrap gap-3 mt-5">
@@ -54,7 +60,7 @@
                             
                     </div>
                     <div class="card-footer justify-center">
-                        <a class="btn btn-primary btn-sm">Edit</a>
+                        <a href="{% url 'course_detail' course.code %}" class="btn btn-sm btn-icon btn-light"><i class="ki-filled ki-eye"></i></a>
                     </div>
                 </div>
             {% endfor %}
@@ -64,19 +70,6 @@
     </div>
     <!-- end: container -->
 
-
-
-    <div class="modal" data-modal="true" id="course">
-        <div class="modal-content max top-[10%]">
-            <div class="modal-header">
-                <h3 class="modal-title">Course</h3>
-                <button class="btn btn-xs btn-icon btn-light" data-modal-dismiss="true"><i class="ki-outline ki-cross"></i></button>
-            </div>
-            <div class="modal-body" id="modal_body">
-                {% include 'academics/course_form.html' %}
-            </div>
-        </div>
-    </div>
     
 {% endblock content %}
 

@@ -7,7 +7,8 @@ from django.template.loader import render_to_string
 from django.db import IntegrityError
 
 # from payment.models import Fee
-from accounts.models import Teacher
+from accounts.models import Teacher, Student
+from payment.models import Fee
 from .models import Department, Course, AcademicYear, Subject, Schedule
 from .forms import DepartmentAddForm, CourseAddForm
 # Create your views here.
@@ -61,12 +62,12 @@ class ChangeDepartmentStatus(View):
         else:
             return JsonResponse({'success':False})
 
+
 class CourseAddView(CreateView):
     template_name = 'academics/course_add.html'
     model = Course
     form_class = CourseAddForm
     success_url = reverse_lazy('course_list')
-
 
 
 class CourseListView(ListView):
@@ -93,22 +94,19 @@ class CourseEditView(UpdateView):
 class CourseDetailsView(TemplateView):
     template_name = 'academics/course_detail.html'
     
-    def get_course(self, code):
-        try:
-            return get_object_or_404(Course, code=code)
-        except (IndexError, Course.DoesNotExist):
-            return None
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        code = self.kwargs.get('code')
-        course = self.get_course(code)
-        context['course'] = course
-        # context['fees'] = Fee.objects.filter(course=course, academic_year__is_open=True)
-        return context
+    def get_course(self, **kwargs):
+        code = kwargs.get('code')
+        course = Course.objects.get(code=code)
+        return course
 
     def get(self, request, **kwargs):
-        return render(request, self.template_name, self.get_context_data())
+        context = {}
+        course = self.get_course(**kwargs)
+        context['course'] = course
+        context['fees'] = Fee.objects.filter(course=course)
+        semesters = Student.objects.filter(course=course).values('semester').distinct()
+
+        return render(request, self.template_name, context)
 
 
 class AcademicYearView(TemplateView):
@@ -129,7 +127,7 @@ class SemesterView(TemplateView):
 
     def get(self, request, **kwargs):
         context = {}
-        semester = kwargs.get('no')
+        semester = kwargs.get('semester')
         context['semester'] = semester
         context['course'] = self.get_course(**kwargs)
         schedules = Schedule.objects.filter(course=context['course'], semester=semester)
@@ -161,10 +159,15 @@ class GetScheduleFormView(View):
     
     def post(self, request):
         data = request.POST
-        print(data)
         course = Course.objects.get(id=request.session['course_id'])
-        print(course)
-        print(request.session['semester'])
+        Schedule.objects.create(
+            day=request.session['day'],
+            period=request.session['period'],
+            course=course,
+            semester=request.session['semester'],
+            subject=Subject.objects.get(id=data['subject']),
+            teacher=Teacher.objects.get(id=data['teacher'])
+        )
         return JsonResponse({'success':True})
     
 

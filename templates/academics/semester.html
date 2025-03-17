@@ -1,4 +1,5 @@
 {% extends 'base_site.html' %}
+{% load academic_tags %}
 
 {% block title %} {{ course.name }} | Grand Crest University{% endblock title %}
 
@@ -44,9 +45,44 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>MONDAY</td>
+                            <td>MON</td>
                             <td class="p-2">
                                 <div class="text-right"><button class="sch-btn" data-period="1" data-day="MON"><i class="ki-filled ki-pencil text-base"></i></button></div>
+                                <span class="block">Mathematics</span>
+                                <span class="text-gray-700 text-xs">John Doe</span>
+                            </td>
+                            <td class="p-2">
+                                <div class="text-right"><button class="sch-btn" data-period="2" data-day="MON"><i class="ki-filled ki-pencil text-base"></i></button></div>
+                                <span class="block">Mathematics</span>
+                                <span class="text-gray-700 text-xs">John Doe</span>
+                            </td>
+                            <td class="p-2">
+                                <div class="text-right"><button class="sch-btn" data-period="3" data-day="MON"><i class="ki-filled ki-pencil text-base"></i></button></div>
+                                <span class="block">Mathematics</span>
+                                <span class="text-gray-700 text-xs">John Doe</span>
+                            </td>
+                            <td class="p-2">
+                                <div class="text-right"><button class="sch-btn" data-period="4" data-day="MON"><i class="ki-filled ki-pencil text-base"></i></button></div>
+                                <span class="block">Mathematics</span>
+                                <span class="text-gray-700 text-xs">John Doe</span>
+                            </td>
+                            <td class="p-2">
+                                <div class="text-right"><button class="sch-btn" data-period="5" data-day="MON"><i class="ki-filled ki-pencil text-base"></i></button></div>
+                                <span class="block">Mathematics</span>
+                                <span class="text-gray-700 text-xs">John Doe</span>
+                            </td>
+                            <td class="p-2">
+                                <div class="text-right"><button class="sch-btn" data-period="6" data-day="MON"><i class="ki-filled ki-pencil text-base"></i></button></div>
+                                <span class="block">Mathematics</span>
+                                <span class="text-gray-700 text-xs">John Doe</span>
+                            </td>
+                            <td class="p-2">
+                                <div class="text-right"><button class="sch-btn" data-period="7" data-day="MON"><i class="ki-filled ki-pencil text-base"></i></button></div>
+                                <span class="block">Mathematics</span>
+                                <span class="text-gray-700 text-xs">John Doe</span>
+                            </td>
+                            <td class="p-2">
+                                <div class="text-right"><button class="sch-btn" data-period="8" data-day="MON"><i class="ki-filled ki-pencil text-base"></i></button></div>
                                 <span class="block">Mathematics</span>
                                 <span class="text-gray-700 text-xs">John Doe</span>
                             </td>
@@ -64,7 +100,7 @@
     <div class="modal" data-modal="true" id="schedule">
         <div class="modal-content max-w-[600px] top-[10%]">
             <div class="modal-header">
-                <h3 class="modal-title">Department</h3>
+                <h3 class="modal-title">Schedule</h3>
                 <button class="btn btn-xs btn-icon btn-light" data-modal-dismiss="true"><i class="ki-outline ki-cross"></i></button>
             </div>
             <div class="modal-body" id="modal_body">
@@ -116,6 +152,7 @@
                     data: form.serialize(),
                     success: function(res){
                         console.log(res);
+                        location.reload();
                     }
                 });
             });

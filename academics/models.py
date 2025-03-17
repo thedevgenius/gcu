@@ -28,6 +28,15 @@ class Department(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def get_total_course(self):
+        courses = Course.objects.filter(department=self)
+        return courses.count()
+    
+    def get_total_student(self):
+        from accounts.models import Student
+        students = Student.objects.filter(course__department=self)
+        return students.count()
 
 class Course(models.Model):
     name = models.CharField(max_length=150)
@@ -49,6 +58,15 @@ class Course(models.Model):
     def get_total_student(self):
         students = Student.objects.filter(course=self)
         return students.count()
+    
+    def get_total_fees(self):
+        from payment.models import Fee
+        total = 0
+        fees = Fee.objects.filter(course=self)
+        for fee in fees:
+            total += fee.get_total()
+        return total
+
     
     
 

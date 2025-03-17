@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
 from academics.models import Course, AcademicYear
@@ -50,6 +50,7 @@ class FeeAddView(TemplateView):
                 breakdown=form.cleaned_data['breakdown']
             )
             fee.course.add(context['course'])
+            return redirect('course_detail', code=context['course'].code)
         else:
             print(form.errors)
         

@@ -29,7 +29,7 @@
         <div class="card-header">
             <h3 class="card-title">All Departments ({{ total_depertment }})</h3>
             <div class="flex">
-                <button class="btn btn-sm btn-primary" data-modal-toggle="#department_add"><i class="ki-filled ki-plus-squared"></i> Add Department</button>
+                <button class="btn btn-sm btn-primary" id="department_add_btn"><i class="ki-filled ki-plus-squared"></i> Add Department</button>
             </div>
         </div>
         <div class="card-body">
@@ -38,6 +38,8 @@
                     <tr>
                         <th>Name</th>
                         <th>Code</th>
+                        <th>Total Course</th>
+                        <th>Total Student</th>
                         <th class="text-right">Action</th>
                     </tr>
                 </thead>
@@ -46,6 +48,8 @@
                     <tr>
                         <td>{{ department.name }}</td>
                         <td>{{ department.code }}</td>
+                        <td>{{ department.get_total_course }}</td>
+                        <td>{{ department.get_total_student }}</td>
                         <td class="text-right">
                             <div class="flex justify-end gap-2">
                                 <button data-id="{{ department.id }}" class="department-edit btn btn-sm btn-icon btn-clear btn-light"><i class="ki-filled ki-pencil"></i></button>
@@ -79,6 +83,12 @@
 {% block extra_js %}
 <script>
     $(document).ready(function () {
+        $('#department_add_btn').click(function(){
+            // const modal = KTModal.getInstance(document.querySelector('#department_add'));
+            // modal.show();
+            const modal = KTModal.getInstance(document.querySelector('#department_add'));
+            modal.show();
+        })
     
         $(document).on('submit', '#department_add_form', function(e){
             e.preventDefault();
@@ -104,6 +114,7 @@
         $(document).on('click', '.department-edit', function(e){
             var btn = $(this);
             var id = btn.data('id');
+            var oldHtml = $('#dept_modal_body').html();
             $.ajax({
                 type: 'GET',
                 url: '{% url "department_add" %}',
@@ -116,6 +127,11 @@
                     $('#dept_modal_body').html(res.html);
                     $('#dept_id').val(id);
                     modal.show();
+                    
+                    modal.on('hide', (detail) => {
+                        console.log('hide action canceled');
+                        $('#dept_modal_body').html(oldHtml)
+                    });
                 },
                 error: function(xhr){
                     console.log(xhr)
