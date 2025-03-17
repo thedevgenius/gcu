@@ -1,0 +1,155 @@
+{% extends 'base_site.html' %}
+
+
+{% block title %} Add Fees | {{ course.name }} | Grand Crest University{% endblock title %}
+
+{% block content %}
+    <style>
+        .adm-content{display: none;}
+        .adm-content.active{display: block;}
+    </style>
+    <!-- begin: container -->
+    <div class="container-fixed">
+        <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+            <div class="flex flex-col justify-center gap-2">
+                <h1 class="text-xl font-semibold leading-none text-gray-900">Add Fees for {{ course.name }}</h1>
+            </div>
+        </div>
+    </div>
+    <!-- end: container -->
+
+    <div class="container-fixed">
+        <div class="card">
+            <form method="post" novalidate="novalidate" class="card-body">
+                {% csrf_token %}
+                {{ form.breakdown }}
+                <div class="grid grid-cols-3 gap-5">
+                    <div class="col-span-1">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">General Info</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="col-span-2">
+                                    <label for="{{ form.due_date.id_for_label }}" class="form-label mb-2">{{ form.due_date.label }}<span class="text-danger">*</span></label>
+                                    {{ form.due_date }}
+                                    {{ form.due_date.errors }}
+                                </div>
+                                <div class="col-span-2 mt-5">
+                                    <label for="{{ form.type.id_for_label }}" class="form-label mb-2">{{ form.type.label }}<span class="text-danger">*</span></label>
+                                    {{ form.type }}
+                                    {{ form.type.errors }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-2">
+                        <div class="card card-grid mb-5 hidden" id="feeCard">
+                            <div class="card-header">
+                                <h3 class="card-title">Fees Breakdown</h3>
+                            </div>
+                            <div class="card-body">
+                                <table class="table" id="breakTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Fee Type</th>
+                                            <th>Amount</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td class="font-semibold" colspan="2">Total</td>
+                                            <td class="font-semibold">₹<span id="totalAmount"></span></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                
+                            </div>
+                        </div>
+                        <div class="error">
+
+                        </div>
+                        <div class="grid grid-cols-2 gap-5 form-card">
+                            <div>
+                                <select name="" id="fee_cat" class="select" required>
+                                    <option value="">--- Select Fee Category ---</option>
+                                    {% for feecat in feecats %}
+                                        <option value="{{ feecat.id }}">{{ feecat.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <input type="number" name="" id="amount" class="input" required>
+                            </div>
+                        </div>
+                        <div class="flex justify-end mt-5">
+                            <button type="button" class="btn btn-primary" id="addBreakdown">ADD</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex mt-5">
+                    <button type="submit" class="btn btn-primary">ADD FEES</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+{% endblock content %}
+
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            var feeJson = {};
+            var totalAmount = 0;
+            $('#addBreakdown').click(function (e) {
+                var cat = $('#fee_cat').val();
+                var amount = $('#amount').val();
+
+                if (cat == '' || !amount) {
+                    $('.error').html('<ul class="errorlist col-span-2"><li>Please select a valid fee category and amount.</li></ul>')
+                    return;
+                }
+
+                feeJson[cat] = amount;
+                totalAmount += parseFloat(amount);
+
+                $('#breakTable tbody').append(`
+                    <tr >
+                        <td>`+ $('#fee_cat option:selected').text() +`</td>
+                        <td>₹`+ amount +`</td>
+                        <td><button type="button" class="delete" data-text="`+ $('#fee_cat option:selected').text() +`" data-id="`+ cat +`">Delete</button></td>
+                    </tr>
+                `);
+                $('#feeCard').removeClass('hidden');
+                $('#totalAmount').text(totalAmount);
+                $("#fee_cat option:selected").remove();
+                $('#amount').val('');
+                $('.errorlist').hide();
+
+                console.log(JSON.stringify(feeJson, null, 4));
+                $('#id_breakdown').val(JSON.stringify(feeJson, null, 4));
+            });
+
+            $(document).on('click', '.delete', function(){
+                $(this).closest("tr").remove();
+                var id = $(this).data('id');
+                var amount = feeJson[id];
+                totalAmount -= amount;
+                $('#totalAmount').text(totalAmount);
+                delete feeJson[id];
+                $('#id_breakdown').val(JSON.stringify(feeJson, null, 4));
+                $('#fee_cat').append('<option value="'+ id +'">'+ $(this).data('text') +'</option>')
+                if (totalAmount == 0){
+                    $('#feeCard').addClass('hidden');
+                    $('.error').html('');
+                }
+            })
+        });
+    </script>
+{% endblock extra_js %}
+    

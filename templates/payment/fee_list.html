@@ -1,0 +1,77 @@
+{% extends 'base_site.html' %}
+
+
+{% block title %} All Fees | {{ course.name }} | Grand Crest University{% endblock title %}
+
+{% block content %}
+    <!-- begin: container -->
+    <div class="container-fixed">
+        <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+            <div class="flex flex-col justify-center gap-2">
+                <h1 class="text-xl font-semibold leading-none text-gray-900">Add Fees for {{ course.name }}</h1>
+            </div>
+        </div>
+    </div>
+    <!-- end: container -->
+
+    <div class="container-fixed">
+        <div class="card">
+            <div class="card-body"></div>
+        </div>
+    </div>
+    
+{% endblock content %}
+
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            var feeJson = {};
+            var totalAmount = 0;
+            $('#addBreakdown').click(function (e) {
+                var cat = $('#fee_cat').val();
+                var amount = $('#amount').val();
+
+                if (cat == '' || !amount) {
+                    $('.error').html('<ul class="errorlist col-span-2"><li>Please select a valid fee category and amount.</li></ul>')
+                    return;
+                }
+
+                feeJson[cat] = amount;
+                totalAmount += parseFloat(amount);
+
+                $('#breakTable tbody').append(`
+                    <tr >
+                        <td>`+ $('#fee_cat option:selected').text() +`</td>
+                        <td>₹`+ amount +`</td>
+                        <td><button type="button" class="delete" data-text="`+ $('#fee_cat option:selected').text() +`" data-id="`+ cat +`">Delete</button></td>
+                    </tr>
+                `);
+                $('#feeCard').removeClass('hidden');
+                $('#totalAmount').text(totalAmount);
+                $("#fee_cat option:selected").remove();
+                $('#amount').val('');
+                $('.errorlist').hide();
+
+                console.log(JSON.stringify(feeJson, null, 4));
+                $('#id_breakdown').val(JSON.stringify(feeJson, null, 4));
+            });
+
+            $(document).on('click', '.delete', function(){
+                $(this).closest("tr").remove();
+                var id = $(this).data('id');
+                var amount = feeJson[id];
+                totalAmount -= amount;
+                $('#totalAmount').text(totalAmount);
+                delete feeJson[id];
+                $('#id_breakdown').val(JSON.stringify(feeJson, null, 4));
+                $('#fee_cat').append('<option value="'+ id +'">'+ $(this).data('text') +'</option>')
+                if (totalAmount == 0){
+                    $('#feeCard').addClass('hidden');
+                    $('.error').html('');
+                }
+            })
+        });
+    </script>
+{% endblock extra_js %}
+    

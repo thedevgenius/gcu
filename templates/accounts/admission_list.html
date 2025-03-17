@@ -1,0 +1,24 @@
+{% extends 'base_site.html' %}
+
+{% block title %}Admission List | Grand Crest University{% endblock title %}
+
+{% block content %}
+    <!-- begin: container -->
+    <div class="container-fixed">
+        <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+            <div class="flex flex-col justify-center gap-2">
+                <h1 class="text-xl font-semibold leading-none text-gray-900">Admission List</h1>
+            </div>
+        </div>
+    </div>
+    <!-- end: container -->
+
+    <!-- begin: container -->
+    <div class="container-fixed">
+        {% for student in students %}
+            <p class="text-white">{{ student.user.username }} -> {{ student.course }} -> {{ student.grade.number }} -> <a href="{% url 'admission' student.get_hash_id %}">Complete Admission</a></p>
+        {% endfor %}
+    </div>
+    <!-- end: container -->
+    
+{% endblock content %}

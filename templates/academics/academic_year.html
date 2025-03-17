@@ -1,0 +1,63 @@
+{% extends 'base_site.html' %}
+
+{% block title %}Academic Years | Grand Crest University{% endblock title %}
+
+{% block breadcrumb %}
+    <div class="flex [.header_&amp;]:below-lg:hidden items-center gap-1.25 text-xs lg:text-sm font-medium mb-2.5 lg:mb-0" data-reparent="true" data-reparent-mode="prepend|lg:prepend" data-reparent-target="#content_container|lg:#header_container">
+        <span class="text-gray-600">Dashboard</span>
+        <i class="ki-filled ki-right text-gray-500 text-3xs"></i>
+        <span class="text-gray-700">Academic Years</span>
+    </div>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <!-- begin: container -->
+    <div class="container-fixed">
+        <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+            <div class="flex flex-col justify-center gap-2">
+                <h1 class="text-xl font-semibold leading-none text-gray-900">Academic Years</h1>
+            </div>
+        </div>
+    </div>
+    <!-- end: container -->
+
+    <!-- begin: container -->
+    <div class="container-fixed">
+        <div class="card card-grid">
+            <div class="card-header">
+                <h3 class="card-title">Academic Years</h3>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Admission Status</th>
+                            <th>Current Semester</th>
+                            <th>Total Student</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for acy in acys %}
+                            <tr>
+                                <td>{{ acy }}</td>
+                                <td>
+                                    {% if acy.is_open == True %}
+                                        <span class="badge badge-success badge-outline">{{ acy.get_open }}</span>
+                                    {% else %}
+                                        <span class="badge badge-danger badge-outline">{{ acy.get_open }}</span>
+                                    {% endif %}
+                                </td>
+                                <td></td>
+                                <td>{{ acy.get_total_student }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+    <!-- end: container -->
+    
+{% endblock content %}

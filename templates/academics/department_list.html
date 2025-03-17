@@ -1,0 +1,147 @@
+{% extends 'base_site.html' %}
+
+{% block title %}All Departments | Grand Crest University{% endblock title %}
+
+{% block breadcrumb %}
+<div class="flex [.header_&amp;]:below-lg:hidden items-center gap-1.25 text-xs lg:text-sm font-medium mb-2.5 lg:mb-0"
+    data-reparent="true" data-reparent-mode="prepend|lg:prepend"
+    data-reparent-target="#content_container|lg:#header_container">
+    <span class="text-gray-600">Dashboard</span>
+    <i class="ki-filled ki-right text-gray-500 text-3xs"></i>
+    <span class="text-gray-700">All Departments</span>
+</div>
+{% endblock breadcrumb %}
+
+{% block content %}
+<!-- begin: container -->
+<div class="container-fixed">
+    <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+        <div class="flex flex-col justify-center gap-2">
+            <h1 class="text-xl font-semibold leading-none text-gray-900">All Departments</h1>
+        </div>
+    </div>
+</div>
+<!-- end: container -->
+
+<!-- begin: container -->
+<div class="container-fixed">
+    <div class="card card-grid">
+        <div class="card-header">
+            <h3 class="card-title">All Departments ({{ total_depertment }})</h3>
+            <div class="flex">
+                <button class="btn btn-sm btn-primary" data-modal-toggle="#department_add"><i class="ki-filled ki-plus-squared"></i> Add Department</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Code</th>
+                        <th class="text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for department in departments %}
+                    <tr>
+                        <td>{{ department.name }}</td>
+                        <td>{{ department.code }}</td>
+                        <td class="text-right">
+                            <div class="flex justify-end gap-2">
+                                <button data-id="{{ department.id }}" class="department-edit btn btn-sm btn-icon btn-clear btn-light"><i class="ki-filled ki-pencil"></i></button>
+                                <label class="switch"><input type="checkbox" class="dept-status" value="{{ department.id }}" {% if department.status == True %}checked{% endif %}></label>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- end: container -->
+
+<div class="modal" data-modal="true" id="department_add">
+    <div class="modal-content max-w-[600px] top-[10%]">
+        <div class="modal-header">
+            <h3 class="modal-title">Department</h3>
+            <button class="btn btn-xs btn-icon btn-light" data-modal-dismiss="true"><i class="ki-outline ki-cross"></i></button>
+        </div>
+        <div class="modal-body" id="dept_modal_body">
+            {% include 'academics/department_form.html' %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block extra_js %}
+<script>
+    $(document).ready(function () {
+    
+        $(document).on('submit', '#department_add_form', function(e){
+            e.preventDefault();
+            form = $(this);
+            $.ajax({
+                type: 'POST',
+                url: '{% url "department_add" %}',
+                data: form.serialize(),
+                success: function (res) {
+                    if (res.status == true) {
+                        form.trigger("reset");
+                        location.reload();
+                    } else {
+                       displayErrors(res.errors); 
+                    }
+                },
+                error: function (xhr) {
+                    location.reload();
+                }
+            });
+        });
+
+        $(document).on('click', '.department-edit', function(e){
+            var btn = $(this);
+            var id = btn.data('id');
+            $.ajax({
+                type: 'GET',
+                url: '{% url "department_add" %}',
+                data: {
+                    'id': id
+                },
+                success: function(res){
+                    //const modalEl = document.querySelector('#department_add');
+                    const modal = KTModal.getInstance(document.querySelector('#department_add'));
+                    $('#dept_modal_body').html(res.html);
+                    $('#dept_id').val(id);
+                    modal.show();
+                },
+                error: function(xhr){
+                    console.log(xhr)
+                }
+            });
+
+            
+        });
+    
+        $(document).on('change', '.dept-status', function(){
+            $(this).each(function() {
+                var id = $(this).val();
+                $.ajax({
+                    url: '{% url "change_status" %}',
+                    type: 'POST',
+                    data:{
+                        'id' : id,
+                        'csrfmiddlewaretoken' : '{{ csrf_token }}'
+                    },
+                    success: function(res){
+                        console.log(res)
+                    }
+                });
+            });
+        });
+        
+    });
+</script>
+{% endblock extra_js %}

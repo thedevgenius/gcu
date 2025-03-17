@@ -1,0 +1,125 @@
+{% extends 'base_site.html' %}
+
+{% block title %} {{ course.name }} | Grand Crest University{% endblock title %}
+
+{% block breadcrumb %}
+    <div class="flex [.header_&amp;]:below-lg:hidden items-center gap-1.25 text-xs lg:text-sm font-medium mb-2.5 lg:mb-0" data-reparent="true" data-reparent-mode="prepend|lg:prepend" data-reparent-target="#content_container|lg:#header_container">
+        <span class="text-gray-600">Dashboard</span>
+        <i class="ki-filled ki-right text-gray-500 text-3xs"></i>
+        <span class="text-gray-700">{{ course.name }}</span>
+    </div>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <!-- begin: container -->
+    <div class="container-fixed">
+        <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+            <div class="flex flex-col justify-center gap-2">
+                <h1 class="text-xl font-semibold leading-none text-gray-900"></h1>
+            </div>
+        </div>
+    </div>
+    <!-- end: container -->
+
+    <!-- begin: container -->
+    <div class="container-fixed">
+        <div class="card card-grid">
+            <div class="card-header">
+                <h3 class="card-title">Schedule</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-border">
+                    <thead>
+                        <tr>
+                            <th>DAY</th>
+                            <th>Period 1</th>
+                            <th>Period 2</th>
+                            <th>Period 3</th>
+                            <th>Period 4</th>
+                            <th>Period 5</th>
+                            <th>Period 6</th>
+                            <th>Period 7</th>
+                            <th>Period 8</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>MONDAY</td>
+                            <td class="p-2">
+                                <div class="text-right"><button class="sch-btn" data-period="1" data-day="MON"><i class="ki-filled ki-pencil text-base"></i></button></div>
+                                <span class="block">Mathematics</span>
+                                <span class="text-gray-700 text-xs">John Doe</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- end: container -->
+
+    <input type="hidden" value="{{ course.code }}" id="code">
+    <input type="hidden" value="{{semester}}" id="semester">
+
+    <div class="modal" data-modal="true" id="schedule">
+        <div class="modal-content max-w-[600px] top-[10%]">
+            <div class="modal-header">
+                <h3 class="modal-title">Department</h3>
+                <button class="btn btn-xs btn-icon btn-light" data-modal-dismiss="true"><i class="ki-outline ki-cross"></i></button>
+            </div>
+            <div class="modal-body" id="modal_body">
+                
+            </div>
+        </div>
+    </div>
+    <div>
+        
+    </div>
+    
+{% endblock content %}
+
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function(){ 
+            const modalEl = document.querySelector('#schedule');
+            const modal = KTModal.getInstance(modalEl);
+            $(document).on('click', '.sch-btn', function(e){
+                var btn = $(this);
+                var code = $('#code').val();
+                var semester = $('#semester').val();
+                $.ajax({
+                    url: '{% url "get_schedule_form" %}',
+                    type: 'GET',
+                    data:{
+                        'code': code,
+                        'semester':semester,
+                        'day': btn.data('day'),
+                        'period': btn.data('period')
+                    },
+                    success: function(res){
+                        $('#modal_body').html(res.html);
+                        
+                        modal.show();
+                    }
+                });
+            });
+
+            $(document).on('submit', '#schedule_add_form', function(e){
+                e.preventDefault();
+                var form = $(this);
+                var code = $('#code').val();
+                var semester = $('#semester').val();
+                $.ajax({
+                    url: '{% url "get_schedule_form" %}',
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function(res){
+                        console.log(res);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock extra_js %}
+    

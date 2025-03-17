@@ -1,0 +1,82 @@
+{% extends 'base_site.html' %}
+
+{% block title %}All Courses | Grand Crest University{% endblock title %}
+
+{% block breadcrumb %}
+    <div class="flex [.header_&amp;]:below-lg:hidden items-center gap-1.25 text-xs lg:text-sm font-medium mb-2.5 lg:mb-0" data-reparent="true" data-reparent-mode="prepend|lg:prepend" data-reparent-target="#content_container|lg:#header_container">
+        <span class="text-gray-600">Dashboard</span>
+        <i class="ki-filled ki-right text-gray-500 text-3xs"></i>
+        <span class="text-gray-700">All Courses</span>
+    </div>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <!-- begin: container -->
+    <div class="container-fixed mt-5">
+        <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+            <div class="flex flex-col justify-center gap-2">
+                <h1 class="text-xl font-medium leading-none text-gray-900">Dashboard</h1>
+            </div>
+            <div class="flex items-center gap-2.5">
+                <button class="btn btn-sm btn-primary" data-modal-toggle="#course"><i class="ki-filled ki-plus-squared"></i> Add New Course</button>
+            </div>
+        </div>
+    </div>
+    <!-- end: container -->
+
+    <!-- begin: container -->
+    
+
+    <div class="container-fixed">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
+            {% for course in courses %}
+                <div class="card">
+                    <div class="card-body lg:pt-9 lg:pb-7.5">
+                        <div class="mb-7 text-center">
+                            <h3 class="text-xl leading-5 font-medium text-gray-900 mb-1">{{ course.name }}</h3>
+                            <p class="text-gray-700 text-sm text-center">{{ course.department }}</p>
+                        </div>
+                        
+                        <div class="flex items-center justify-center flex-wrap gap-2 lg:gap-5">
+                            <div class="grid grid-cols-1 gap-1.5 border-[0.5px] border-dashed border-gray-400 rounded-md px-2.5 py-2 shrink-0 min-w-24 max-w-auto">
+                                <span class="text-gray-900 text-2sm leading-none font-medium">{{ course.get_total_student }}</span>
+                                <span class="text-gray-700 text-xs">Total Student</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-center flex-wrap gap-3 mt-5">
+                            {% for grade in course.grade_set.all %}
+                                {% if grade.status == True %}
+                                    <a href="{% url 'grade_details' course.code grade.number %}" class="btn btn-light btn-sm"><i class="ki-filled ki-check-circle"></i>SEM {{ grade.number }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                            
+                    </div>
+                    <div class="card-footer justify-center">
+                        <a class="btn btn-primary btn-sm">Edit</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        
+    </div>
+    <!-- end: container -->
+
+
+
+    <div class="modal" data-modal="true" id="course">
+        <div class="modal-content max top-[10%]">
+            <div class="modal-header">
+                <h3 class="modal-title">Course</h3>
+                <button class="btn btn-xs btn-icon btn-light" data-modal-dismiss="true"><i class="ki-outline ki-cross"></i></button>
+            </div>
+            <div class="modal-body" id="modal_body">
+                {% include 'academics/course_form.html' %}
+            </div>
+        </div>
+    </div>
+    
+{% endblock content %}
+

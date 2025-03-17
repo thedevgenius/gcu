@@ -1,0 +1,42 @@
+{% extends 'base_site.html' %}
+{% load account_tags %}
+
+{% block title %}{{ student.user.username }} | Admission | Grand Crest University{% endblock title %}
+
+{% block content %}
+    <style>
+        .adm-content{display: none;}
+        .adm-content.active{display: block;}
+    </style>
+    <!-- begin: container -->
+    <div class="container-fixed">
+        <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+            <div class="flex flex-col justify-center gap-2">
+                <h1 class="text-xl font-semibold leading-none text-gray-900">{{ student.user.username }}</h1>
+            </div>
+        </div>
+    </div>
+    <!-- end: container -->
+
+    <div class="container-fixed">
+        
+    </div>
+    
+{% endblock content %}
+
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            $('.adm-btn').on('click', function (e) {
+                e.preventDefault();
+                var id = $(this).attr('href');
+                $('.adm-btn').removeClass('active');
+                $(this).addClass('active');
+                $('.adm-content').removeClass('active');
+                $(id).addClass('active');
+            });
+        });
+    </script>
+{% endblock extra_js %}
+    
