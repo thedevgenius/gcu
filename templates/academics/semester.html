@@ -8,6 +8,8 @@
         <span class="text-gray-600">Dashboard</span>
         <i class="ki-filled ki-right text-gray-500 text-3xs"></i>
         <span class="text-gray-700">{{ course.name }}</span>
+        <i class="ki-filled ki-right text-gray-500 text-3xs"></i>
+        <span class="text-gray-700">Semester {{ semester }}</span>
     </div>
 {% endblock breadcrumb %}
 
@@ -23,7 +25,7 @@
     <!-- end: container -->
 
     <!-- begin: container -->
-    <div class="container-fixed">
+    {% comment %} <div class="container-fixed">
         <div class="card card-grid">
             <div class="card-header">
                 <h3 class="card-title">Schedule</h3>
@@ -91,6 +93,54 @@
                 </table>
             </div>
         </div>
+    </div> {% endcomment %}
+    <!-- end: container -->
+
+    <!-- begin: container -->
+    <div class="container-fixed mt-7">
+        <div class="grid grid-cols-2 gap-7">
+            <div class="col-span-1">
+                <div class="card card-grid">
+                    <div class="card-header">
+                        <h3 class="card-title">Overview</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- <table class="table table-auto">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table> -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-1">
+                <div class="card card-grid">
+                    <div class="card-header">
+                        <h3 class="card-title">Subjects</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-auto">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th class="text-right">Credit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for subject in subjects %}
+                                    <tr>
+                                        <td>{{ subject.name }}</td>
+                                        <td class="text-right">{{ subject.credit }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>       
     </div>
     <!-- end: container -->
 

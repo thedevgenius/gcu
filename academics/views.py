@@ -63,6 +63,14 @@ class ChangeDepartmentStatus(View):
             return JsonResponse({'success':False})
 
 
+class AcademicYearView(TemplateView):
+    template_name = 'academics/academic_year.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['acys'] = AcademicYear.objects.all()
+        return context
+
 class CourseAddView(CreateView):
     template_name = 'academics/course_add.html'
     model = Course
@@ -103,19 +111,12 @@ class CourseDetailsView(TemplateView):
         context = {}
         course = self.get_course(**kwargs)
         context['course'] = course
-        context['fees'] = Fee.objects.filter(course=course)
-        semesters = Student.objects.filter(course=course).values('semester').distinct()
+        context['fees'] = Fee.objects.filter(course=course)        
 
         return render(request, self.template_name, context)
 
 
-class AcademicYearView(TemplateView):
-    template_name = 'academics/academic_year.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['acys'] = AcademicYear.objects.all()
-        return context
     
 class SemesterView(TemplateView):
     template_name = 'academics/semester.html'
@@ -133,12 +134,9 @@ class SemesterView(TemplateView):
         schedules = Schedule.objects.filter(course=context['course'], semester=semester)
         request.session['course_id'] = context['course'].id
         request.session['semester'] = semester
-        
+        context['subjects'] = Subject.objects.filter(course=context['course'], semester=semester)
         return render(request, self.template_name, context)
     
-    
-    
-
 
 class GetScheduleFormView(View):
     def get(self, request):

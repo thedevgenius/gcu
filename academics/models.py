@@ -3,19 +3,16 @@ from core.choices import COURSE_LEVEL_CHOICES, DAY_CHOICES, COURSE_SYSTEM_CHOICE
 from accounts.models import Student
 from django.core.exceptions import ValidationError
 
+from accounts.models import Student
 # Create your models here.
 class AcademicYear(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
-    current = models.IntegerField(default=1)
     is_active = models.BooleanField(default=True)
     admission_status = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.start_date.year} - {self.end_date.year}'
-    
-    def get_open(self):
-        return 'Open' if self.is_open == True else 'Closed'
 
     # def get_total_student(self):
     #     students = Student.objects.filter(academic_year=self)
@@ -34,7 +31,6 @@ class Department(models.Model):
         return courses.count()
     
     def get_total_student(self):
-        from accounts.models import Student
         students = Student.objects.filter(course__department=self)
         return students.count()
 
@@ -66,10 +62,24 @@ class Course(models.Model):
         for fee in fees:
             total += fee.get_total()
         return total
+    
+    def get_seat_remaining(self):
+        remaining = self.max_students - self.get_total_student()
+        return remaining
 
+
+class Batch(models.Model):
+    course = models.ForeignKey('Course', on_delete=models.CASCADE)
+    number = models.IntegerField()
+    academic_year = models.ForeignKey('AcademicYear', on_delete=models.SET_NULL, null=True)
+
+    def get_batch_type(self):
+        return dict(COURSE_SYSTEM_CHOICES)[self.course.system]
+    
+    def __str__(self):
+        return f'{self.course} - {self.get_batch_type()} - {self.number}'
     
     
-
 class Subject(models.Model):
     course = models.ForeignKey('Course', on_delete=models.CASCADE)
     semester = models.IntegerField()

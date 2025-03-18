@@ -66,13 +66,23 @@ class Employee(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+
+class Teacher(models.Model):
+    user = models.OneToOneField('User', on_delete=models.CASCADE)
+    department = models.ForeignKey('academics.Department', on_delete=models.SET_NULL, null=True)
+    designation = models.CharField(max_length=150)
+    
+
+    def __str__(self):
+        return self.user.username
 
 class Student(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='students')
     
     course = models.ForeignKey('academics.Course', on_delete=models.SET_NULL, null=True, blank=True)
     academic_year = models.ForeignKey('academics.AcademicYear', on_delete=models.SET_NULL, null=True, blank=True)
-    semester = models.IntegerField(default=1)
+    batch = models.ForeignKey('academics.Batch', on_delete=models.SET_NULL, null=True)
     class_roll = models.PositiveIntegerField()
     uni_roll = models.PositiveIntegerField(unique=True, null=True, blank=True)
     reg_no = models.CharField(max_length=50, unique=True, null=True, blank=True)
@@ -99,13 +109,3 @@ class Student(models.Model):
 
     def get_hash_id(self):
         return student_hash.encode(self.id)
-    
-
-class Teacher(models.Model):
-    user = models.OneToOneField('User', on_delete=models.CASCADE)
-    department = models.ForeignKey('academics.Department', on_delete=models.SET_NULL, null=True)
-    designation = models.CharField(max_length=150)
-    
-
-    def __str__(self):
-        return self.user.username
