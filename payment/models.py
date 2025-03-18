@@ -24,3 +24,6 @@ class Fee(models.Model):
         for key, value in self.breakdown.items():
             total += int(value)
         return total
+    
+    def get_type(self):
+        return dict(FEE_TYPE_CHOICES)[self.type]

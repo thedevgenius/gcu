@@ -11,46 +11,31 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <!-- begin: container -->
-    <div class="container-fixed">
-        <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
-            <div class="flex flex-col justify-center gap-2">
-                <h1 class="text-xl font-semibold leading-none text-gray-900">Academic Years</h1>
-            </div>
-            <a href="#" class="btn btn-sm btn-primary"><i class="ki-filled ki-plus-squared"></i> Add Academic Year</a>
-        </div>
-    </div>
-    <!-- end: container -->
 
     <!-- begin: container -->
     <div class="container-fixed">
         <div class="card card-grid">
             <div class="card-header">
                 <h3 class="card-title">Academic Years</h3>
+                <button class="btn btn-sm btn-primary" id="add_academic_year"><i class="ki-filled ki-plus-squared"></i> Add Academic Year</a>
             </div>
             <div class="card-body">
                 <table class="table">
                     <thead>
                         <tr>
                             <th>Title</th>
-                            <th>Admission Status</th>
-                            <th>Current Semester</th>
                             <th>Total Student</th>
+                            <th>Admission Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for acy in acys %}
                             <tr>
                                 <td>{{ acy }}</td>
-                                <td>
-                                    {% if acy.is_open == True %}
-                                        <span class="badge badge-success badge-outline">{{ acy.get_open }}</span>
-                                    {% else %}
-                                        <span class="badge badge-danger badge-outline">{{ acy.get_open }}</span>
-                                    {% endif %}
-                                </td>
-                                <td></td>
                                 <td>{{ acy.get_total_student }}</td>
+                                <td>
+                                    <label class="switch"><input type="checkbox" class="adm-status" value="{{ acy.id }}" {% if acy.admission_status == True %}checked{% endif %}></label>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -62,3 +47,41 @@
     <!-- end: container -->
     
 {% endblock content %}
+
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function(){
+            $(document).on('click', '#add_academic_year', function(e){
+                $.ajax({
+                    url: '{% url "add_academic_year" %}',
+                    type: 'POST',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(res){
+                        location.reload();
+                    }
+                })
+            });
+
+            $(document).on('change', '.adm-status', function(){
+                $(this).each(function() {
+                    var id = $(this).val();
+                    $.ajax({
+                        url: '{% url "change_status" %}',
+                        type: 'POST',
+                        data:{
+                            'id' : id,
+                            'csrfmiddlewaretoken' : '{{ csrf_token }}'
+                        },
+                        success: function(res){
+                            console.log(res)
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+{% endblock extra_js %}
+    

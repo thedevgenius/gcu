@@ -3,21 +3,17 @@
 
 {% block title %} Add Fees | {{ course.name }} | Grand Crest University{% endblock title %}
 
-{% block content %}
-    <style>
-        .adm-content{display: none;}
-        .adm-content.active{display: block;}
-    </style>
-    <!-- begin: container -->
-    <div class="container-fixed">
-        <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
-            <div class="flex flex-col justify-center gap-2">
-                <h1 class="text-xl font-semibold leading-none text-gray-900">Add Fees for {{ course.name }}</h1>
-            </div>
-        </div>
+{% block breadcrumb %}
+    <div class="flex [.header_&amp;]:below-lg:hidden items-center gap-1.25 text-xs lg:text-sm font-medium mb-2.5 lg:mb-0" data-reparent="true" data-reparent-mode="prepend|lg:prepend" data-reparent-target="#content_container|lg:#header_container">
+        <a href="{% url 'dashboard' %}" class="text-gray-600 hover:text-primary">Dashboard</a>
+        <i class="ki-filled ki-right text-gray-500 text-3xs"></i>
+        <a href="{% url 'course_detail' course.code %}" class="text-gray-600 hover:text-primary">{{ course.name }}</a>
+        <i class="ki-filled ki-right text-gray-700 text-3xs"></i>
+        <span class="text-gray-800">Add Fees</span>
     </div>
-    <!-- end: container -->
+{% endblock breadcrumb %}
 
+{% block content %}
     <div class="container-fixed">
         <div class="card">
             <form method="post" novalidate="novalidate" class="card-body">

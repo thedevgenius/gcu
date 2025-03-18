@@ -4,71 +4,85 @@
 
 {% block breadcrumb %}
     <div class="flex [.header_&amp;]:below-lg:hidden items-center gap-1.25 text-xs lg:text-sm font-medium mb-2.5 lg:mb-0" data-reparent="true" data-reparent-mode="prepend|lg:prepend" data-reparent-target="#content_container|lg:#header_container">
-        <span class="text-gray-600">Dashboard</span>
+        <a href="{% url 'dashboard' %}" class="text-gray-600 hover:text-primary">Dashboard</a>
         <i class="ki-filled ki-right text-gray-500 text-3xs"></i>
-        <span class="text-gray-700">All Courses</span>
-        <i class="ki-filled ki-right text-gray-500 text-3xs"></i>
-        <span class="text-gray-700">{{ course.name }}</span>
+        <a href="{% url 'course_list' %}" class="text-gray-600 hover:text-primary">All Courses</a>
+        <i class="ki-filled ki-right text-gray-700 text-3xs"></i>
+        <span class="text-gray-800">{{ course.name }}</span>
     </div>
 {% endblock breadcrumb %}
 
 {% block content %}
-    <!-- begin: container -->
-    <div class="container-fixed">
-        <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
-            <div class="flex flex-col justify-center gap-2">
-                <h1 class="text-xl font-semibold leading-none text-gray-900">{{ course.name }}</h1>
-            </div>
-        </div>
-    </div>
-    <!-- end: container -->
 
     <!-- begin: container -->
     <div class="container-fixed">
-        <div class="grid grid-cols-2 gap-5">
+        <div class="grid grid-cols-2 gap-7">
             <div class="col-span-1">
-                <div class="card card-grid">
+                <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Overview</h3>
                     </div>
-                    <div class="card-body">
-                        <!-- <table class="table table-auto">
-                            <thead>
+                    <div class="card-body pt-4 pb-3">
+                        <table class="table-auto">
+                            <tbody>
                                 <tr>
-                                    <th></th>
+                                    <td class="text-sm text-gray-600 pb-3.5 pe-3">Course Name:</td>
+                                    <td class="text-sm text-gray-900 pb-3.5">{{ course.name }}</td>
                                 </tr>
-                            </thead>
-                        </table> -->
+                                <tr>
+                                    <td class="text-sm text-gray-600 pb-3.5 pe-3">Department:</td>
+                                    <td class="text-sm text-gray-900 pb-3.5">{{ course.department }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-sm text-gray-600 pb-3.5 pe-3">Active Students:</td>
+                                    <td class="text-sm text-gray-900 pb-3.5">0</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
             <div class="col-span-1">
-                <div class="card card-grid">
+                <div class="card grow">
                     <div class="card-header">
-                        <h3 class="card-title">Subjects</h3>
+                        <h3 class="card-title">Fees</h3>
+                        <a href="{% url 'course_fee_add' course.code %}" class="btn btn-primary btn-sm"><i class="ki-filled ki-plus-squared"></i>Add New</a>
                     </div>
                     <div class="card-body">
-                        <table class="table table-auto">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Code</th>
-                                    <th>Credit</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                
-                                {% for subject in subjects %}
-                                    <tr>
-                                        <td>{{ subject.name }}</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                {% endfor %}
-                                    
-                                
-                            </tbody>
-                        </table>
+                        <div class="grid gap-2">
+                            {% for fee in fees %}
+                                <div class="flex items-center justify-between border border-gray-200 rounded-xl gap-2 px-4 py-4 bg-secondary-clarity">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-medium text-gray-900 mb-px">₹ {{ fee.get_total }}</span>
+                                        <span class="text-2sm text-gray-700">
+                                            {% if fee.type == 'ADM' %}
+                                                On or before admission
+                                            {% else %}
+                                                Due on {{ fee.due_date }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="badge badge-sm badge-success badge-outline">{{ fee.get_type }}</span>
+                                        <div class="flex gap-0.5">
+                                            <button class="btn btn-sm btn-icon btn-clear btn-light"><i class="ki-filled ki-notepad-edit"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="flex items-center justify-between border border-gray-200 rounded-xl gap-2 px-4 py-4">
+                                <div class="flex flex-col">
+                                    <span class="text-lg font-medium text-gray-900 mb-px">₹ {{ course.get_total_fees }}</span>
+                                    <span class="text-sm text-gray-700">Total Fees</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="badge badge-sm badge-success badge-outline">Total Fees</span>
+                                    <div class="flex gap-0.5">
+                                        <button class="btn btn-sm btn-icon btn-clear btn-light"><i class="ki-filled ki-notepad-edit"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
