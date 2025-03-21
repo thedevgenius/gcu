@@ -13,15 +13,6 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <!-- begin: container -->
-    <div class="container-fixed">
-        <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
-            <div class="flex flex-col justify-center gap-2">
-                <h1 class="text-xl font-semibold leading-none text-gray-900">{{ course.name }}</h1>
-            </div>
-        </div>
-    </div>
-    <!-- end: container -->
 
     <!-- begin: container -->
     <div class="container-fixed">
@@ -29,49 +20,21 @@
             <div class="col-span-1">
                 <div class="card card-grid">
                     <div class="card-header">
-                        <h3 class="card-title">Overview</h3>
-                    </div>
-                    <div class="card-body">
-                        <!-- <table class="table table-auto">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                        </table> -->
-                    </div>
-                </div>
-            </div>
-            <div class="col-span-1">
-                <div class="card card-grid">
-                    <div class="card-header">
-                        <h3 class="card-title">Subjects</h3>
+                        <h3 class="card-title">Fees</h3>
+                        <a href="{% url 'course_fee_add' course.code  %}" class="btn btn-sm btn-primary"><i class="ki-filled ki-plus-squared"></i> Add New Course</a>
                     </div>
                     <div class="card-body">
                         <table class="table table-auto">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Code</th>
-                                    <th>Credit</th>
+                                    <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                
-                                {% for subject in subjects %}
-                                    <tr>
-                                        <td>{{ subject.name }}</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                {% endfor %}
-                                    
-                                
-                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+            
         </div>       
     </div>
     <!-- end: container -->

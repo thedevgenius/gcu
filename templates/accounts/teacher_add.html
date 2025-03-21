@@ -2,16 +2,17 @@
 
 {% block title %}Add New Teacher | Grand Crest University{% endblock title %}
 
-{% block content %}
-    <!-- begin: container -->
-    <div class="container-fixed">
-        <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
-            <div class="flex flex-col justify-center gap-2">
-                <h1 class="text-xl font-semibold leading-none text-gray-900">Add New Teacher</h1>
-            </div>
-        </div>
+{% block breadcrumb %}
+    <div class="flex [.header_&amp;]:below-lg:hidden items-center gap-1.25 text-xs lg:text-sm font-medium mb-2.5 lg:mb-0" data-reparent="true" data-reparent-mode="prepend|lg:prepend" data-reparent-target="#content_container|lg:#header_container">
+        <span class="text-gray-600">Dashboard</span>
+        <i class="ki-filled ki-right text-gray-500 text-3xs"></i>
+        <span class="text-gray-700">All Courses</span>
+        <i class="ki-filled ki-right text-gray-500 text-3xs"></i>
+        <span class="text-gray-700">{{ course.name }}</span>
     </div>
-    <!-- end: container -->
+{% endblock breadcrumb %}
+
+{% block content %}
 
     <!-- begin: container -->
     <div class="container-fixed">
