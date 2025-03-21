@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import DepartmentAddView, DepartmentListView, ChangeDepartmentStatus, CourseAddView, CourseListView, CourseEditView, CourseDetailsView, AcademicYearView, SemesterView, GetScheduleFormView
+from .views import AddAcademicYearView, DepartmentAddView, DepartmentListView, ChangeDepartmentStatus, CourseAddView, CourseListView, CourseEditView, CourseDetailsView, AcademicYearView, SemesterView, GetScheduleFormView
 #Create your urls here
 
 urlpatterns = [
@@ -14,6 +14,7 @@ urlpatterns = [
     path('course/<str:code>/', CourseDetailsView.as_view(), name='course_detail'),
     
     path('academic-years/', AcademicYearView.as_view(), name='academic_year'),
+    path('academic-years/add/', AddAcademicYearView.as_view(), name='add_academic_year'),
     path('<str:code>/<int:semester>/', SemesterView.as_view(), name='semester'),
     path('open-schedule-form/', GetScheduleFormView.as_view(), name='get_schedule_form'),
 ]

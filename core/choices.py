@@ -5,6 +5,7 @@ GENDER_CHOICES = [
 ]
 
 BLOOD_GROUP_CHOICES = [
+    ('', '--- Select Blood Group ---'),
     ('A+', 'A+'), ('A-', 'A-'), ('B+', 'B+'), ('B-', 'B-'),
     ('AB+', 'AB+'), ('AB-', 'AB-'), ('O+', 'O+'), ('O-', 'O-')
 ]
@@ -16,6 +17,7 @@ USER_TYPE_CHOICES = [
 ]
 
 EMPLOYEE_DEPARTMENT_CHOICES = [
+    ('TEA', 'Teacher'),
     ('ADM', 'Admission'),
     ('RCP', 'Receptionist'),
     ('ACT', 'Accountant')

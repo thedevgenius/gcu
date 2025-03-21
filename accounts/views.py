@@ -25,6 +25,49 @@ class SignInView(LoginView):
 class DashboardView(TemplateView):
     template_name = 'accounts/dashboard.html'
 
+
+class TeacherAddView(TemplateView):
+    template_name = 'accounts/teacher_add.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = TeaheerAddForm()
+        return context
+    
+    def post(self, request):
+        form = TeaheerAddForm(request.POST)
+        if form.is_valid():
+            now = datetime.now()
+            data = form.cleaned_data
+            dept = data['department']
+            last_student = Teacher.objects.filter(department=dept).select_related('user').order_by('-id').first()
+            last_student_id = int(last_student.user.username.split('/')[-1]) if last_student else 0
+            username = f'GCU/{dept.code}/{now:%y}/{(last_student_id + 1):03d}'
+            user = User.objects.create_user(
+                username=username,
+                first_name=data['first_name'],
+                last_name=data['last_name'],
+                email=data['email'],
+                phone=data['phone'],
+                date_of_birth=data['date_of_birth'],
+                blood_group=data['blood_group'],
+            )
+            Teacher.objects.create(
+                user=user,
+                department=dept,
+                designation=data['designation']
+            )
+            Employee.objects.create(
+                user=user,
+                department='TEA',
+                designation=data['designation']
+            )
+        else:
+            print('error')
+            return render(request, self.template_name, {'form':form})
+        return render(request, self.template_name, self.get_context_data())
+
+
 @method_decorator(login_required, name='dispatch')
 class StudentAddView(TemplateView):
     template_name = 'accounts/student_add.html'
@@ -105,45 +148,3 @@ class AdmissionView(FormView):
 #         return context
     
 
-class TeacherAddView(TemplateView):
-    template_name = 'accounts/teacher_add.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = TeaheerAddForm
-        return context
-    
-    def post(self, request):
-        form = TeaheerAddForm(request.POST)
-        if form.is_valid():
-            now = datetime.now()
-            data = form.cleaned_data
-            first_name = data['first_name']
-            last_name = data['last_name']
-            dept = data['department']
-            dob = data['date_of_birth']
-            full_name = f"{first_name}{last_name}".lower()
-            password = f"{full_name[:4]}{dob:%d%m}"
-            last_student = Teacher.objects.filter(department=dept).select_related('user').order_by('-id').first()
-            last_student_id = int(last_student.user.username.split('/')[-1]) if last_student else 0
-            username = f'GCU/{dept.code}/{now:%y}/{(last_student_id + 1):03d}'
-            print(username)
-            print(password)
-            user = User.objects.create_user(
-                username=username,
-                password=password,
-                first_name=first_name,
-                last_name=last_name,
-                email=data['email'],
-                phone=data['phone'],
-                date_of_birth=dob,
-                blood_group=data['blood_group'],
-            )
-            Teacher.objects.create(
-                user=user,
-                department=dept,
-                designation=data['designation']
-            )
-        else:
-            print('error')
-        return render(request, self.template_name, self.get_context_data())

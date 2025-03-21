@@ -13,15 +13,6 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-<!-- begin: container -->
-<div class="container-fixed">
-    <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
-        <div class="flex flex-col justify-center gap-2">
-            <h1 class="text-xl font-semibold leading-none text-gray-900">All Departments</h1>
-        </div>
-    </div>
-</div>
-<!-- end: container -->
 
 <!-- begin: container -->
 <div class="container-fixed">
@@ -84,8 +75,6 @@
 <script>
     $(document).ready(function () {
         $('#department_add_btn').click(function(){
-            // const modal = KTModal.getInstance(document.querySelector('#department_add'));
-            // modal.show();
             const modal = KTModal.getInstance(document.querySelector('#department_add'));
             modal.show();
         })
@@ -122,14 +111,11 @@
                     'id': id
                 },
                 success: function(res){
-                    //const modalEl = document.querySelector('#department_add');
                     const modal = KTModal.getInstance(document.querySelector('#department_add'));
                     $('#dept_modal_body').html(res.html);
                     $('#dept_id').val(id);
                     modal.show();
-                    
                     modal.on('hide', (detail) => {
-                        console.log('hide action canceled');
                         $('#dept_modal_body').html(oldHtml)
                     });
                 },

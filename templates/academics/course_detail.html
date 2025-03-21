@@ -4,11 +4,11 @@
 
 {% block breadcrumb %}
     <div class="flex [.header_&amp;]:below-lg:hidden items-center gap-1.25 text-xs lg:text-sm font-medium mb-2.5 lg:mb-0" data-reparent="true" data-reparent-mode="prepend|lg:prepend" data-reparent-target="#content_container|lg:#header_container">
-        <span class="text-gray-600">Dashboard</span>
+        <a href="{% url 'dashboard' %}" class="text-gray-600 hover:text-primary">Dashboard</a>
         <i class="ki-filled ki-right text-gray-500 text-3xs"></i>
-        <span class="text-gray-700">All Courses</span>
-        <i class="ki-filled ki-right text-gray-500 text-3xs"></i>
-        <span class="text-gray-700">{{ course.name }}</span>
+        <a href="{% url 'course_list' %}" class="text-gray-600 hover:text-primary">All Courses</a>
+        <i class="ki-filled ki-right text-gray-700 text-3xs"></i>
+        <span class="text-gray-800">{{ course.name }}</span>
     </div>
 {% endblock breadcrumb %}
 
@@ -16,9 +16,9 @@
 
     <!-- begin: container -->
     <div class="container-fixed">
-        <div class="grid grid-cols-2 gap-5">
+        <div class="grid grid-cols-2 gap-7">
             <div class="col-span-1">
-                <div class="card card-grid">
+                <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Fees</h3>
                         <a href="{% url 'course_fee_add' course.code  %}" class="btn btn-sm btn-primary"><i class="ki-filled ki-plus-squared"></i> Add New Course</a>

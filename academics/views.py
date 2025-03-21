@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, TemplateView
@@ -5,26 +7,52 @@ from django.views import View
 from django.urls import reverse_lazy
 from django.template.loader import render_to_string
 from django.db import IntegrityError
+from django.template.context_processors import csrf
 
-# from payment.models import Fee
+from payment.models import Fee
 from accounts.models import Teacher, Student
 from payment.models import Fee
 from .models import Department, Course, AcademicYear, Subject, Schedule
 from .forms import DepartmentAddForm, CourseAddForm
 # Create your views here.
 
+
+class AcademicYearView(TemplateView):
+    """For listing all Academic Years"""
+    template_name = 'academics/academic_year.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['acys'] = AcademicYear.objects.all()
+        return context
+
+
+class AddAcademicYearView(View):
+    """Add new academic year"""
+    def post(self):
+        last_year = AcademicYear.objects.all().order_by('-end_date').first().end_date.year
+        start_date = datetime(last_year, 4, 1)
+        end_date = datetime(last_year+1, 7, 31)
+        AcademicYear.objects.create(
+            start_date=start_date,
+            end_date=end_date
+        )
+        return JsonResponse({'success': True})
+
+
+#Views for Department
 class DepartmentAddView(View):
     def get(self, request):
         id = request.GET.get('id')
         department = Department.objects.get(id=id)
         form = DepartmentAddForm(instance=department)  # Adjust fields as necessary
-        from django.template.context_processors import csrf
+
         context = {'form': form}
         context.update(csrf(request))
         html = render_to_string('academics/department_form.html', context)
         return JsonResponse({'status': True, 'html':html})
     
-    def post(self, request, **kwargs):
+    def post(self, request):
         id = request.POST.get('id')
         if id:
             department = get_object_or_404(Department, id=id)
@@ -63,14 +91,7 @@ class ChangeDepartmentStatus(View):
             return JsonResponse({'success':False})
 
 
-class AcademicYearView(TemplateView):
-    template_name = 'academics/academic_year.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['acys'] = AcademicYear.objects.all()
-        return context
-
+#Views for Course
 class CourseAddView(CreateView):
     template_name = 'academics/course_add.html'
     model = Course
